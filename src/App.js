@@ -130,7 +130,7 @@ const LoginScreen = ({ onLogin, users }) => {
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <div className="text-center mb-8">
           <Package size={48} className="mx-auto text-blue-600 mb-4" />
-          <h1 className="text-2xl font-bold text-gray-800">EstoqueFF</h1>
+          <h1 className="text-2xl font-bold text-gray-800">CCB Brusque</h1>
           <p className="text-gray-600">Controle de Estoque</p>
         </div>
 
@@ -947,7 +947,7 @@ const defaultLabelConfig = {
   labelHeight: 60
 };
 
-const EstoqueFFApp = () => {
+const CCBBrusqueApp = () => {
   const [currentScreen, setCurrentScreen] = useState('dashboard');
   const [currentUser, setCurrentUser] = useState(() => {
     try {
@@ -958,20 +958,20 @@ const EstoqueFFApp = () => {
     }
   });
   
-  const [products, setProducts] = useFirebaseState('estoqueff_products', [
+  const [products, setProducts] = useFirebaseState('ccbbrusque_products', [
     { id: 'P001', name: 'Notebook Dell', brand: 'Dell', category: 'Eletrônicos', code: 'NB-DELL-001', stock: 15, minStock: 5, qrCode: 'QR001', createdAt: '2025-01-01' },
     { id: 'P002', name: 'Mouse Logitech', brand: 'Logitech', category: 'Acessórios', code: 'MS-LOG-002', stock: 3, minStock: 10, qrCode: 'QR002', createdAt: '2025-01-01' },
     { id: 'P003', name: 'Teclado Mecânico', brand: 'Razer', category: 'Acessórios', code: 'KB-RZR-003', stock: 8, minStock: 5, qrCode: 'QR003', createdAt: '2025-01-01' },
     { id: 'P004', name: 'Monitor 24"', brand: 'Samsung', category: 'Eletrônicos', code: 'MN-SAM-004', stock: 12, minStock: 3, qrCode: 'QR004', createdAt: '2025-01-01' }
   ]);
   
-  const [movements, setMovements] = useFirebaseState('estoqueff_movements', [
+  const [movements, setMovements] = useFirebaseState('ccbbrusque_movements', [
     { id: '1', product: 'Notebook Dell', type: 'saída', quantity: 2, user: 'Administrador', userId: 'user1', userName: 'Administrador', userRole: 'admin', date: '2025-08-04 14:30' },
     { id: '2', product: 'Mouse Logitech', type: 'entrada', quantity: 5, user: 'Operador Sistema', userId: 'user2', userName: 'Operador Sistema', userRole: 'operator', date: '2025-08-04 12:15' },
     { id: '3', product: 'Monitor 24"', type: 'saída', quantity: 1, user: 'Administrador', userId: 'user1', userName: 'Administrador', userRole: 'admin', date: '2025-08-04 10:45' }
   ]);
 
-  const [companySettings, setCompanySettings] = useFirebaseState('estoqueff_settings', {
+  const [companySettings, setCompanySettings] = useFirebaseState('ccbbrusque_settings', {
     companyName: 'Minha Empresa',
     responsibleName: 'Juninho Rezini',
     lowStockAlert: true
@@ -1075,7 +1075,7 @@ const EstoqueFFApp = () => {
       // Remove from Firebase
       if (window.firebaseDatabase) {
         // Remove o produto
-        const productsRef = window.firebaseRef(window.firebaseDatabase, 'estoqueff_products');
+        const productsRef = window.firebaseRef(window.firebaseDatabase, 'ccbbrusque_products');
         const updatedProducts = products.filter(p => p.id !== productId);
         window.firebaseSet(productsRef, updatedProducts)
           .then(() => {
@@ -1086,7 +1086,7 @@ const EstoqueFFApp = () => {
             if (productLabelConfigs[productId]) {
               const labelConfigRef = window.firebaseRef(
                 window.firebaseDatabase, 
-                `estoqueff_product_label_configs/${productId}`
+                `ccbbrusque_product_label_configs/${productId}`
               );
               window.firebaseSet(labelConfigRef, null) // Usa null para remover
                 .then(() => {
@@ -1141,7 +1141,7 @@ const EstoqueFFApp = () => {
       if (window.firebaseDatabase) {
         const dbRef = window.firebaseRef(
           window.firebaseDatabase, 
-          `estoqueff_product_label_configs/${productId}`
+          `ccbbrusque_product_label_configs/${productId}`
         );
         window.firebaseSet(dbRef, cleanConfig);
       }
@@ -1477,7 +1477,7 @@ const EstoqueFFApp = () => {
     
     try {
       const productId = 'P' + String(Date.now()).slice(-6);
-      const qrCode = `ESTOQUEFF_${productId}_${newProduct.code.replace(/\s+/g, '_').toUpperCase()}`;
+      const qrCode = `CCBBRUSQUE_${productId}_${newProduct.code.replace(/\s+/g, '_').toUpperCase()}`;
       
       const product = {
         ...newProduct,
@@ -1713,7 +1713,7 @@ const EstoqueFFApp = () => {
     const finalY = startY + headerHeight + (rows.length * estimatedRowHeight) + padding;
     pdf.setFontSize(8);
     pdf.text(`Total de registros: ${data.length}`, 14, finalY + 15);
-    pdf.text(`EstoqueFF - Sistema de Controle de Estoque`, 14, finalY + 25);
+    pdf.text(`CCB Brusque - Sistema de Controle de Estoque`, 14, finalY + 25);
     
     const filename = `${type === 'products' ? 'produtos' : 'movimentacoes'}_${new Date().toISOString().slice(0, 10)}.pdf`;
     pdf.save(filename);
@@ -1843,10 +1843,10 @@ const EstoqueFFApp = () => {
     
     if (type === 'products') {
       data = filteredProducts.length > 0 ? filteredProducts : products;
-      title = 'Relatório de Produtos - EstoqueFF';
+      title = 'Relatório de Produtos - CCB Brusque';
     } else if (type === 'movements') {
       data = filteredMovements.length > 0 ? filteredMovements : movements;
-      title = 'Relatório de Movimentações - EstoqueFF';
+      title = 'Relatório de Movimentações - CCB Brusque';
     }
     
     if (format === 'pdf') {
@@ -1873,7 +1873,7 @@ const EstoqueFFApp = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `estoqueff_backup_${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `ccbbrusque_backup_${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -2293,7 +2293,7 @@ const EstoqueFFApp = () => {
       {currentScreen === 'dashboard' && (
         <div className="p-4 pb-20 md:ml-64 md:pb-4">
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl font-bold text-gray-800">EstoqueFF Dashboard</h1>
+            <h1 className="text-2xl font-bold text-gray-800">CCB Brusque Dashboard</h1>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
                 {companySettings.responsibleName.split(' ').map(n => n[0]).join('')}
@@ -3368,7 +3368,7 @@ const EstoqueFFApp = () => {
               <div className="text-sm text-gray-600 space-y-1">
                 <p>📦 Total de produtos: {formatNumber(stats.totalProducts)}</p>
                 <p>📊 Total de movimentações: {movements.length}</p>
-                <p>🔄 Versão: EstoqueFF v2.0.0</p>
+                <p>🔄 Versão: CCB Brusque v2.0.0</p>
                 <p>✅ Status: Sistema funcionando com todas as funcionalidades</p>
               </div>
               
@@ -3752,4 +3752,4 @@ const EstoqueFFApp = () => {
   );
 };
 
-export default EstoqueFFApp;
+export default CCBBrusqueApp;
